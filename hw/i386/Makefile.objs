@@ -2,6 +2,7 @@ obj-$(CONFIG_KVM) += kvm/
 obj-y += multiboot.o
 obj-y += pvh.o
 obj-y += pc.o
+obj-y += e820.o
 obj-$(CONFIG_I440FX) += pc_piix.o
 obj-$(CONFIG_Q35) += pc_q35.o
 obj-y += fw_cfg.o pc_sysfw.o
