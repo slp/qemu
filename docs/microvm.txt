@@ -1,0 +1,78 @@
+Microvm is a machine type inspired by both NEMU and Firecracker, and
+constructed after the machine model implemented by the latter.
+
+It's main purpose is providing users a minimalist machine type free
+from the burden of legacy compatibility, serving as a stepping stone
+for future projects aiming at improving boot times, reducing the
+attack surface and slimming down QEMU's footprint.
+
+The microvm machine type supports the following devices:
+
+ - ISA bus
+ - i8259 PIC
+ - LAPIC (implicit if using KVM)
+ - IOAPIC (defaults to kernel_irqchip_split = true)
+ - i8254 PIT
+ - MC146818 RTC (optional)
+ - kvmclock (if using KVM)
+ - fw_cfg
+ - One ISA serial port (optional)
+ - Up to eight virtio-mmio devices (configured by the user)
+
+It supports the following machine-specific options:
+
+microvm.option-roms=bool (Set off to disable loading option ROMs)
+microvm.isa-serial=bool (Set off to disable the instantiation an ISA serial port)
+microvm.rtc=bool (Set off to disable the instantiation of an MC146818 RTC)
+microvm.kernel-cmdline=bool (Set off to disable adding virtio-mmio devices to the kernel cmdline)
+
+By default, microvm uses qboot as its BIOS, to obtain better boot
+times, but it's also compatible with SeaBIOS.
+
+As no current FW is able to boot from a block device using virtio-mmio
+as its transport, a microvm-based VM needs to be run using a host-side
+kernel and, optionally, an initrd image.
+
+This is an example of instantiating a microvm VM with a virtio-mmio
+based console:
+
+qemu-system-x86_64 -M microvm
+ -enable-kvm -cpu host -m 512m -smp 2 \
+ -kernel vmlinux -append "console=hvc0 root=/dev/vda" \
+ -nodefaults -no-user-config -nographic \
+ -chardev stdio,id=virtiocon0,server \
+ -device virtio-serial-device \
+ -device virtconsole,chardev=virtiocon0 \
+ -drive id=test,file=test.img,format=raw,if=none \
+ -device virtio-blk-device,drive=test \
+ -netdev tap,id=tap0,script=no,downscript=no \
+ -device virtio-net-device,netdev=tap0
+
+This is another example, this time using an ISA serial port, useful
+for debugging purposes:
+
+qemu-system-x86_64 -M microvm \
+ -enable-kvm -cpu host -m 512m -smp 2 \
+ -kernel vmlinux -append "earlyprintk=ttyS0 console=ttyS0 root=/dev/vda" \
+ -nodefaults -no-user-config -nographic \
+ -serial stdio \
+ -drive id=test,file=test.img,format=raw,if=none \
+ -device virtio-blk-device,drive=test \
+ -netdev tap,id=tap0,script=no,downscript=no \
+ -device virtio-net-device,netdev=tap0
+
+Finally, in this example a microvm VM is instantiated without RTC,
+without an ISA serial port and without loading the option ROMs,
+obtaining the smallest configuration:
+
+qemu-system-x86_64 -M microvm,rtc=off,isa-serial=off,option-roms=off \
+ -enable-kvm -cpu host -m 512m -smp 2 \
+ -kernel vmlinux -append "console=hvc0 root=/dev/vda" \
+ -nodefaults -no-user-config -nographic \
+ -chardev stdio,id=virtiocon0,server \
+ -device virtio-serial-device \
+ -device virtconsole,chardev=virtiocon0 \
+ -drive id=test,file=test.img,format=raw,if=none \
+ -device virtio-blk-device,drive=test \
+ -netdev tap,id=tap0,script=no,downscript=no \
+ -device virtio-net-device,netdev=tap0
