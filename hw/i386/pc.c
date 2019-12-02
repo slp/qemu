@@ -1150,7 +1150,8 @@ void pc_memory_init(PCMachineState *pcms,
                                         1);
 
     fw_cfg = fw_cfg_arch_create(machine,
-                                x86ms->boot_cpus, x86ms->apic_id_limit);
+                                x86ms->boot_cpus, x86ms->apic_id_limit,
+                                acpi_tables, acpi_tables_len, &hpet_cfg);
 
     rom_set_fw(fw_cfg);
 

@@ -11,6 +11,7 @@
 
 #include "hw/boards.h"
 #include "hw/nvram/fw_cfg.h"
+#include "hw/timer/hpet.h"
 
 #define FW_CFG_ACPI_TABLES      (FW_CFG_ARCH_LOCAL + 0)
 #define FW_CFG_SMBIOS_ENTRIES   (FW_CFG_ARCH_LOCAL + 1)
@@ -20,7 +21,10 @@
 
 FWCfgState *fw_cfg_arch_create(MachineState *ms,
                                uint16_t boot_cpus,
-                               uint16_t apic_id_limit);
+                               uint16_t apic_id_limit,
+                               char unsigned *acpi_tables,
+                               size_t acpi_tables_len,
+                               struct hpet_fw_config *hpet_fw_cfg);
 void fw_cfg_build_smbios(MachineState *ms, FWCfgState *fw_cfg);
 void fw_cfg_build_feature_control(MachineState *ms, FWCfgState *fw_cfg);
 

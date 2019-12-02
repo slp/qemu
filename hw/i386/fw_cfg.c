@@ -14,7 +14,6 @@
 
 #include "qemu/osdep.h"
 #include "sysemu/numa.h"
-#include "hw/acpi/acpi.h"
 #include "hw/firmware/smbios.h"
 #include "hw/i386/pc.h"
 #include "hw/i386/fw_cfg.h"
@@ -86,8 +85,11 @@ void fw_cfg_build_smbios(MachineState *ms, FWCfgState *fw_cfg)
 }
 
 FWCfgState *fw_cfg_arch_create(MachineState *ms,
-                                      uint16_t boot_cpus,
-                                      uint16_t apic_id_limit)
+                               uint16_t boot_cpus,
+                               uint16_t apic_id_limit,
+                               char unsigned *acpi_tables,
+                               size_t acpi_tables_len,
+                               struct hpet_fw_config *hpet_fw_cfg)
 {
     FWCfgState *fw_cfg;
     uint64_t *numa_fw_cfg;
@@ -114,8 +116,10 @@ FWCfgState *fw_cfg_arch_create(MachineState *ms,
      */
     fw_cfg_add_i16(fw_cfg, FW_CFG_MAX_CPUS, apic_id_limit);
     fw_cfg_add_i64(fw_cfg, FW_CFG_RAM_SIZE, (uint64_t)ram_size);
-    fw_cfg_add_bytes(fw_cfg, FW_CFG_ACPI_TABLES,
-                     acpi_tables, acpi_tables_len);
+    if (acpi_tables) {
+        fw_cfg_add_bytes(fw_cfg, FW_CFG_ACPI_TABLES,
+                         acpi_tables, acpi_tables_len);
+    }
     fw_cfg_add_i32(fw_cfg, FW_CFG_IRQ0_OVERRIDE, kvm_allows_irq0_override());
 
     fw_cfg_add_bytes(fw_cfg, FW_CFG_E820_TABLE,
@@ -123,7 +127,10 @@ FWCfgState *fw_cfg_arch_create(MachineState *ms,
     fw_cfg_add_file(fw_cfg, "etc/e820", e820_table,
                     sizeof(struct e820_entry) * e820_get_num_entries());
 
-    fw_cfg_add_bytes(fw_cfg, FW_CFG_HPET, &hpet_cfg, sizeof(hpet_cfg));
+    if (hpet_fw_cfg) {
+        fw_cfg_add_bytes(fw_cfg, FW_CFG_HPET,
+                         &hpet_fw_cfg, sizeof(hpet_fw_cfg));
+    }
     /* allocate memory for the NUMA channel: one (64bit) word for the number
      * of nodes, one word for each VCPU->node and one word for each node to
      * hold the amount of memory.
