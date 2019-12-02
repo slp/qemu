@@ -1229,7 +1229,7 @@ uint64_t pc_pci_hole64_start(void)
     return ROUND_UP(hole64_start, 1 * GiB);
 }
 
-qemu_irq pc_allocate_cpu_irq(void)
+qemu_irq x86_allocate_cpu_irq(void)
 {
     return qemu_allocate_irq(pic_irq_request, NULL, 0);
 }
@@ -1410,7 +1410,7 @@ void pc_i8259_create(ISABus *isa_bus, qemu_irq *i8259_irqs)
     } else if (xen_enabled()) {
         i8259 = xen_interrupt_controller_init();
     } else {
-        i8259 = i8259_init(isa_bus, pc_allocate_cpu_irq());
+        i8259 = i8259_init(isa_bus, x86_allocate_cpu_irq());
     }
 
     for (size_t i = 0; i < ISA_NUM_IRQS; i++) {
