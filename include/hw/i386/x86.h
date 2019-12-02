@@ -22,6 +22,8 @@
 #include "qemu/notify.h"
 
 #include "hw/boards.h"
+#include "hw/isa/isa.h"
+#include "hw/i386/ioapic.h"
 #include "hw/nmi.h"
 
 typedef struct {
@@ -78,6 +80,19 @@ typedef struct {
     OBJECT_GET_CLASS(X86MachineClass, obj, TYPE_X86_MACHINE)
 #define X86_MACHINE_CLASS(class) \
     OBJECT_CLASS_CHECK(X86MachineClass, class, TYPE_X86_MACHINE)
+
+/* Global System Interrupts */
+
+#define GSI_NUM_PINS IOAPIC_NUM_PINS
+
+typedef struct GSIState {
+    qemu_irq i8259_irq[ISA_NUM_IRQS];
+    qemu_irq ioapic_irq[IOAPIC_NUM_PINS];
+} GSIState;
+
+void gsi_handler(void *opaque, int n, int level);
+GSIState *x86_gsi_create(qemu_irq **irqs, bool pci_enabled);
+void ioapic_init_gsi(GSIState *gsi_state, const char *parent_name);
 
 bool x86_machine_is_smm_enabled(X86MachineState *x86ms);
 
