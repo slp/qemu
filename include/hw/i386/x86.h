@@ -94,6 +94,8 @@ void gsi_handler(void *opaque, int n, int level);
 GSIState *x86_gsi_create(qemu_irq **irqs, bool pci_enabled);
 void ioapic_init_gsi(GSIState *gsi_state, const char *parent_name);
 
+qemu_irq x86_allocate_cpu_irq(void);
+
 bool x86_machine_is_smm_enabled(X86MachineState *x86ms);
 
 uint32_t x86_cpu_apic_id_from_index(X86MachineState *pcms,
