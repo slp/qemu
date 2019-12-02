@@ -50,6 +50,7 @@ typedef struct {
 
     /* Configuration options: */
     uint64_t max_ram_below_4g;
+    OnOffAuto smm;
 
     /* RAM information (sizes, addresses, configuration): */
     ram_addr_t below_4g_mem_size, above_4g_mem_size;
@@ -68,6 +69,7 @@ typedef struct {
 } X86MachineState;
 
 #define X86_MACHINE_MAX_RAM_BELOW_4G "max-ram-below-4g"
+#define X86_MACHINE_SMM              "smm"
 
 #define TYPE_X86_MACHINE   MACHINE_TYPE_NAME("x86")
 #define X86_MACHINE(obj) \
@@ -76,6 +78,8 @@ typedef struct {
     OBJECT_GET_CLASS(X86MachineClass, obj, TYPE_X86_MACHINE)
 #define X86_MACHINE_CLASS(class) \
     OBJECT_CLASS_CHECK(X86MachineClass, class, TYPE_X86_MACHINE)
+
+bool x86_machine_is_smm_enabled(X86MachineState *x86ms);
 
 uint32_t x86_cpu_apic_id_from_index(X86MachineState *pcms,
                                     unsigned int cpu_index);
