@@ -356,7 +356,7 @@ void gsi_handler(void *opaque, int n, int level)
     qemu_set_irq(s->ioapic_irq[n], level);
 }
 
-GSIState *pc_gsi_create(qemu_irq **irqs, bool pci_enabled)
+GSIState *x86_gsi_create(qemu_irq **irqs, bool pci_enabled)
 {
     GSIState *s;
 

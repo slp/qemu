@@ -143,7 +143,7 @@ typedef struct GSIState {
 
 void gsi_handler(void *opaque, int n, int level);
 
-GSIState *pc_gsi_create(qemu_irq **irqs, bool pci_enabled);
+GSIState *x86_gsi_create(qemu_irq **irqs, bool pci_enabled);
 
 /* vmport.c */
 #define TYPE_VMPORT "vmport"

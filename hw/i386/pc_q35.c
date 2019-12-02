@@ -243,7 +243,7 @@ static void pc_q35_init(MachineState *machine)
                              PC_MACHINE_ACPI_DEVICE_PROP, &error_abort);
 
     /* irq lines */
-    gsi_state = pc_gsi_create(&x86ms->gsi, pcmc->pci_enabled);
+    gsi_state = x86_gsi_create(&x86ms->gsi, pcmc->pci_enabled);
 
     ich9_lpc = ICH9_LPC_DEVICE(lpc);
     lpc_dev = DEVICE(lpc);
