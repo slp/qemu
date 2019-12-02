@@ -26,6 +26,7 @@
 #include "qapi/qmp/qerror.h"
 #include "hw/pci/pci.h"
 #include "hw/pci/msi.h"
+#include "hw/pci/msix.h"
 
 bool msi_nonbroken;
 bool pci_available;
@@ -52,6 +53,31 @@ uint16_t pci_requester_id(PCIDevice *dev)
 {
     g_assert(false);
     return 0;
+}
+
+bool msi_is_masked(const PCIDevice *dev, unsigned int vector)
+{
+    g_assert_not_reached();
+}
+
+MSIMessage msi_get_message(PCIDevice *dev, unsigned int vector)
+{
+    g_assert_not_reached();
+}
+
+int msix_enabled(PCIDevice *dev)
+{
+    g_assert_not_reached();
+}
+
+bool msix_is_masked(PCIDevice *dev, unsigned int vector)
+{
+    g_assert_not_reached();
+}
+
+MSIMessage msix_get_message(PCIDevice *dev, unsigned vector)
+{
+    g_assert_not_reached();
 }
 
 /* Required by ahci.c */
