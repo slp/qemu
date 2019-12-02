@@ -11,6 +11,7 @@
  */
 
 #include "qemu/osdep.h"
+#include "hw/i386/i8259.h"
 #include "hw/isa/i8259_internal.h"
 #include "qemu/module.h"
 #include "hw/i386/apic_internal.h"

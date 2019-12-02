@@ -37,6 +37,7 @@
 #include "sysemu/sysemu.h"
 
 #include "hw/i386/x86.h"
+#include "hw/i386/i8259.h"
 #include "target/i386/cpu.h"
 #include "target/i386/kvm_i386.h"
 #include "hw/i386/topology.h"

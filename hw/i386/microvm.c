@@ -33,6 +33,7 @@
 #include "hw/i386/microvm.h"
 #include "hw/i386/x86.h"
 #include "hw/i386/pc.h"
+#include "hw/i386/i8259.h"
 #include "target/i386/cpu.h"
 #include "hw/timer/i8254.h"
 #include "hw/rtc/mc146818rtc.h"
