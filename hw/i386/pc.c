@@ -374,7 +374,7 @@ static void pic_irq_request(void *opaque, int irq, int level)
     CPUState *cs = first_cpu;
     X86CPU *cpu = X86_CPU(cs);
 
-    DPRINTF("pic_irqs: %s irq %d\n", level? "raise" : "lower", irq);
+    DPRINTF("pic_irqs: %s irq %d\n", level ? "raise" : "lower", irq);
     if (cpu->apic_state && !kvm_irqchip_in_kernel()) {
         CPU_FOREACH(cs) {
             cpu = X86_CPU(cs);
