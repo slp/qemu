@@ -100,8 +100,10 @@ config MICROVM
     select APIC
     select IOAPIC
     select I8259
+    select I8254
     select MC146818RTC
     select VIRTIO_MMIO
+    select SMBIOS
 
 config VTD
     bool
